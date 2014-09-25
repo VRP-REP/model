@@ -154,20 +154,6 @@
 									<xs:documentation>Identifier of the instance as it appears on www.vrp-rep.org. For instance: E-n22-k4 in the Christofides, Mingozzi, and Toth (1979) dataset</xs:documentation>
 								</xs:annotation>
 							</xs:element>
-							<xs:element name="descriptor" minOccurs="0">
-								<xs:annotation>
-									<xs:documentation>Use this element to provide a description of your data if you feel it is needed. For instance, tell users what your custom elements mean.</xs:documentation>
-								</xs:annotation>
-								<xs:complexType>
-									<xs:sequence>
-										<xs:any processContents="skip" maxOccurs="unbounded">
-											<xs:annotation>
-												<xs:documentation>Add any feature</xs:documentation>
-											</xs:annotation>
-										</xs:any>
-									</xs:sequence>
-								</xs:complexType>
-							</xs:element>
 						</xs:sequence>
 					</xs:complexType>
 				</xs:element>
@@ -371,15 +357,17 @@
 										<xs:annotation>
 											<xs:documentation>Distance type</xs:documentation>
 										</xs:annotation>
-										<xs:element name="euclidean" fixed="">
+										<xs:element name="euclidean">
 											<xs:annotation>
 												<xs:documentation>Euclidean distances</xs:documentation>
 											</xs:annotation>
+											<xs:complexType/>
 										</xs:element>
-										<xs:element name="manhattan" fixed="">
+										<xs:element name="manhattan">
 											<xs:annotation>
 												<xs:documentation>Manhattan or cap driver distances</xs:documentation>
 											</xs:annotation>
+											<xs:complexType/>
 										</xs:element>
 										<xs:element name="distance_calculator" type="xs:string"/>
 									</xs:choice>
@@ -387,15 +375,17 @@
 										<xs:annotation>
 											<xs:documentation>Rounding rule</xs:documentation>
 										</xs:annotation>
-										<xs:element name="ceil" fixed="">
+										<xs:element name="ceil">
 											<xs:annotation>
 												<xs:documentation>Round distances to the higher integer</xs:documentation>
 											</xs:annotation>
+											<xs:complexType/>
 										</xs:element>
-										<xs:element name="floor" fixed="">
+										<xs:element name="floor">
 											<xs:annotation>
 												<xs:documentation>Round distances to the lower integer</xs:documentation>
 											</xs:annotation>
+											<xs:complexType/>
 										</xs:element>
 										<xs:element name="decimals" type="xs:int">
 											<xs:annotation>
@@ -478,17 +468,17 @@
 											</xs:annotation>
 											<xs:element name="fix_cost" type="positive_double" minOccurs="0">
 												<xs:annotation>
-													<xs:documentation>The cost of using the trailer</xs:documentation>
+													<xs:documentation>The cost</xs:documentation>
 												</xs:annotation>
 											</xs:element>
 											<xs:element name="cost_x_distance" type="positive_double" minOccurs="0">
 												<xs:annotation>
-													<xs:documentation>The cost of pulling the trailler for one unit of distance</xs:documentation>
+													<xs:documentation>Variable cost per unit of distance</xs:documentation>
 												</xs:annotation>
 											</xs:element>
 											<xs:element name="cost_x_time" type="positive_double" minOccurs="0">
 												<xs:annotation>
-													<xs:documentation>The cost of using the trailer for one time unit</xs:documentation>
+													<xs:documentation>Varaible cost per unit of time</xs:documentation>
 												</xs:annotation>
 											</xs:element>
 										</xs:sequence>
@@ -520,7 +510,6 @@
 												</xs:simpleContent>
 											</xs:complexType>
 										</xs:element>
-										<xs:element ref="action" minOccurs="0" maxOccurs="unbounded"/>
 									</xs:sequence>
 									<xs:attribute name="type" type="xs:integer" use="required">
 										<xs:annotation>
@@ -533,10 +522,6 @@
 										</xs:annotation>
 									</xs:attribute>
 								</xs:complexType>
-								<xs:key name="operation_type">
-									<xs:selector xpath="action"/>
-									<xs:field xpath="@type"/>
-								</xs:key>
 								<xs:unique name="trailer_type">
 									<xs:selector xpath="trailers"/>
 									<xs:field xpath="@type"/>
@@ -610,16 +595,28 @@
 											<xs:annotation>
 												<xs:documentation>Demand</xs:documentation>
 											</xs:annotation>
-											<xs:element name="quantity" type="xs:double"/>
-											<xs:element name="td_quantity" type="time_dependent_parameter_type"/>
-											<xs:element name="uncertain_quantity" type="uncertain_parameter_type"/>
+											<xs:element name="quantity" type="xs:double">
+												<xs:annotation>
+													<xs:documentation>Fix (deterministic) quantity</xs:documentation>
+												</xs:annotation>
+											</xs:element>
+											<xs:element name="td_quantity" type="time_dependent_parameter_type">
+												<xs:annotation>
+													<xs:documentation>Time-dependent quantity</xs:documentation>
+												</xs:annotation>
+											</xs:element>
+											<xs:element name="uncertain_quantity" type="uncertain_parameter_type">
+												<xs:annotation>
+													<xs:documentation>Uncertain quantity</xs:documentation>
+												</xs:annotation>
+											</xs:element>
 										</xs:choice>
 										<xs:element ref="demand" minOccurs="0" maxOccurs="unbounded">
 											<xs:annotation>
 												<xs:documentation>Model a customer demands (e.g., CVRP)</xs:documentation>
 											</xs:annotation>
 										</xs:element>
-										<xs:element name="prize" type="xs:integer" minOccurs="0">
+										<xs:element name="prize" type="xs:double" minOccurs="0">
 											<xs:annotation>
 												<xs:documentation>Prize collected for servicing the request (e.g. prize-collecting TSP)</xs:documentation>
 											</xs:annotation>
@@ -629,11 +626,26 @@
 												<xs:documentation>Release date of the request (e.g. dynamic VRPs)</xs:documentation>
 											</xs:annotation>
 										</xs:element>
-										<xs:element name="service_time" minOccurs="0">
+										<xs:choice>
 											<xs:annotation>
-												<xs:documentation>The service time needed to service the request (e.g. DVRP, Green VRP)</xs:documentation>
+												<xs:documentation>Service time</xs:documentation>
 											</xs:annotation>
-										</xs:element>
+											<xs:element name="service_time" type="xs:double">
+												<xs:annotation>
+													<xs:documentation>Fix (deterministic) service time</xs:documentation>
+												</xs:annotation>
+											</xs:element>
+											<xs:element name="td_service_time" type="time_dependent_parameter_type">
+												<xs:annotation>
+													<xs:documentation>Time-dependent service time</xs:documentation>
+												</xs:annotation>
+											</xs:element>
+											<xs:element name="uncertain_service_time" type="uncertain_parameter_type">
+												<xs:annotation>
+													<xs:documentation>Uncertain service time</xs:documentation>
+												</xs:annotation>
+											</xs:element>
+										</xs:choice>
 										<xs:element name="predecessors" minOccurs="0">
 											<xs:annotation>
 												<xs:documentation>Set of preceeding requests. Use this element to model, for instnace, pick-ups preceding deliveries in PDPs</xs:documentation>
@@ -1157,7 +1169,7 @@
 	<xs:group name="storage">
 		<xs:sequence>
 			<xs:annotation>
-				<xs:documentation>Defines the storage unit</xs:documentation>
+				<xs:documentation>Defines a storage unit</xs:documentation>
 			</xs:annotation>
 			<xs:choice minOccurs="0">
 				<xs:annotation>
