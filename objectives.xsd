@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2014 (x64) (http://www.altova.com) by IMA (Université Catholique de l'Ouest) -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xs:element name="solutions">
+		<xs:annotation>
+			<xs:documentation>Root element</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="solution" maxOccurs="unbounded">
+					<xs:annotation>
+						<xs:documentation>The objective function for the solution</xs:documentation>
+					</xs:annotation>
+					<xs:complexType mixed="true">
+						<xs:simpleContent>
+							<xs:extension base="xs:double">
+								<xs:attribute name="instance" type="xs:string" use="required">
+									<xs:annotation>
+										<xs:documentation>The unique identifier of the instance registered in www.vrp-rep.org</xs:documentation>
+									</xs:annotation>
+								</xs:attribute>
+							</xs:extension>
+						</xs:simpleContent>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

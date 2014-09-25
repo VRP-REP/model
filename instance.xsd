@@ -1,0 +1,1201 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2014 (x64) (http://www.altova.com) by IMA (Université Catholique de l'Ouest) -->
+<!-- Date: 2012/06/21 -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xs:element name="action">
+		<xs:annotation>
+			<xs:documentation>Deifnes an action</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="duration" type="positive_double">
+					<xs:annotation>
+						<xs:documentation>Time needed to complete the action</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="cost" type="positive_double">
+					<xs:annotation>
+						<xs:documentation>cost of the action</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+			</xs:sequence>
+			<xs:attribute name="type" type="xs:positiveInteger" use="required">
+				<xs:annotation>
+					<xs:documentation>Action type</xs:documentation>
+				</xs:annotation>
+			</xs:attribute>
+			<xs:attribute name="name" type="xs:string" use="required">
+				<xs:annotation>
+					<xs:documentation>Name of the action</xs:documentation>
+				</xs:annotation>
+			</xs:attribute>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="compartment">
+		<xs:annotation>
+			<xs:documentation>Defines a vehicle compartment</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:annotation>
+				<xs:documentation>Variable capacity (e.g. MC-VRP)</xs:documentation>
+			</xs:annotation>
+			<xs:sequence>
+				<xs:choice>
+					<xs:annotation>
+						<xs:documentation>Defines the capacity of the compartment. The capacity of a compartment can be defined by either a flexible capacity range (i.e., the exact capacity is left a a decision variable) or by a fixed capacity value</xs:documentation>
+					</xs:annotation>
+					<xs:sequence>
+						<xs:annotation>
+							<xs:documentation>Flexible compartment capacity</xs:documentation>
+						</xs:annotation>
+						<xs:element name="min_capacity" type="positive_double">
+							<xs:annotation>
+								<xs:documentation>Minimum compartment capacity</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="max_capacity" type="positive_double">
+							<xs:annotation>
+								<xs:documentation>Maximum compartment capacity</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+					<xs:element name="fix_capacity" type="positive_double">
+						<xs:annotation>
+							<xs:documentation>Fixed compartment capacity</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:choice>
+				<xs:element name="compatible_request_type" type="xs:int" minOccurs="0" maxOccurs="unbounded">
+					<xs:annotation>
+						<xs:documentation>Defines the types of requests that are compatible with this compartment</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:choice minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Compartment dimensions</xs:documentation>
+					</xs:annotation>
+					<xs:sequence>
+						<xs:annotation>
+							<xs:documentation>Variable compartment dimensions</xs:documentation>
+						</xs:annotation>
+						<xs:element name="min_dimensions" type="dimensions_type">
+							<xs:annotation>
+								<xs:documentation>Minimum dimensions</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="max_dimensions" type="dimensions_type">
+							<xs:annotation>
+								<xs:documentation>Maximum dimensions</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+					<xs:element ref="dimensions">
+						<xs:annotation>
+							<xs:documentation>Fix compartment dimensions</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:choice>
+			</xs:sequence>
+			<xs:attribute name="type" type="xs:integer" use="required">
+				<xs:annotation>
+					<xs:documentation>Defines a type of compartment</xs:documentation>
+				</xs:annotation>
+			</xs:attribute>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="demand">
+		<xs:annotation>
+			<xs:documentation>Defines a demand</xs:documentation>
+		</xs:annotation>
+		<xs:complexType mixed="true">
+			<xs:choice minOccurs="0">
+				<xs:element ref="random_variable">
+					<xs:annotation>
+						<xs:documentation>Models a probability distribution</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+			</xs:choice>
+			<xs:attribute name="splitable" type="xs:boolean" default="false">
+				<xs:annotation>
+					<xs:documentation>Is the demand splitable? set is_splitable=true if that is the case (e.g., VRP with split delivery)</xs:documentation>
+				</xs:annotation>
+			</xs:attribute>
+			<xs:attribute name="type" type="xs:int">
+				<xs:annotation>
+					<xs:documentation>The demand's type. Use this attribute to model, for instance, different demands in multicompartment VRPs</xs:documentation>
+				</xs:annotation>
+			</xs:attribute>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="dimensions" type="dimensions_type">
+		<xs:annotation>
+			<xs:documentation>Defines the dimensions of an object</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:element name="instance">
+		<xs:annotation>
+			<xs:documentation>Defines a VRP instance</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:all>
+				<xs:element name="info">
+					<xs:annotation>
+						<xs:documentation>Provides information about the instance file</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="dataset" type="xs:string">
+								<xs:annotation>
+									<xs:documentation>Identifier of the dataset to wich the instance belongs as it appears on www.vrp-rep.org. For instance: Christofides, Mingozzi, and Toth (1979)</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="name" type="xs:string">
+								<xs:annotation>
+									<xs:documentation>Identifier of the instance as it appears on www.vrp-rep.org. For instance: E-n22-k4 in the Christofides, Mingozzi, and Toth (1979) dataset</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="descriptor" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>Use this element to provide a description of your data if you feel it is needed. For instance, tell users what your custom elements mean.</xs:documentation>
+								</xs:annotation>
+								<xs:complexType>
+									<xs:sequence>
+										<xs:any processContents="skip" maxOccurs="unbounded">
+											<xs:annotation>
+												<xs:documentation>Add any feature</xs:documentation>
+											</xs:annotation>
+										</xs:any>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="network">
+					<xs:annotation>
+						<xs:documentation>Defines the transportation network</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="nodes">
+								<xs:annotation>
+									<xs:documentation>The set of nodes in the network</xs:documentation>
+								</xs:annotation>
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="node" minOccurs="2" maxOccurs="unbounded">
+											<xs:annotation>
+												<xs:documentation>Defines a node in the network</xs:documentation>
+											</xs:annotation>
+											<xs:complexType>
+												<xs:sequence>
+													<xs:annotation>
+														<xs:documentation>Node characteristics</xs:documentation>
+													</xs:annotation>
+													<xs:choice minOccurs="0">
+														<xs:annotation>
+															<xs:documentation>Defines the location of the node. The location may be deffined by a set of Euclidean coordinates or set of GPS coordinates</xs:documentation>
+														</xs:annotation>
+														<xs:sequence>
+															<xs:annotation>
+																<xs:documentation>Euclidean coordinates</xs:documentation>
+															</xs:annotation>
+															<xs:element name="cx" type="xs:double">
+																<xs:annotation>
+																	<xs:documentation>Coordinate value on the x axis</xs:documentation>
+																</xs:annotation>
+															</xs:element>
+															<xs:element name="cy" type="xs:double">
+																<xs:annotation>
+																	<xs:documentation>Coordinate value on the y axis</xs:documentation>
+																</xs:annotation>
+															</xs:element>
+															<xs:element name="cz" type="xs:double" minOccurs="0">
+																<xs:annotation>
+																	<xs:documentation>Coordinate value on the z axis</xs:documentation>
+																</xs:annotation>
+															</xs:element>
+														</xs:sequence>
+														<xs:sequence>
+															<xs:annotation>
+																<xs:documentation>GPS Coordinates</xs:documentation>
+															</xs:annotation>
+															<xs:element name="latitude" type="xs:double">
+																<xs:annotation>
+																	<xs:documentation>Latitude</xs:documentation>
+																</xs:annotation>
+															</xs:element>
+															<xs:element name="longitude" type="xs:double">
+																<xs:annotation>
+																	<xs:documentation>Longitude</xs:documentation>
+																</xs:annotation>
+															</xs:element>
+														</xs:sequence>
+													</xs:choice>
+													<xs:element name="compatible_vehicle" type="xs:int" minOccurs="0" maxOccurs="unbounded">
+														<xs:annotation>
+															<xs:documentation>List the vehicle profiles that are compatible with this node. Use this element to model site-dependent VRPs</xs:documentation>
+														</xs:annotation>
+													</xs:element>
+												</xs:sequence>
+												<xs:attribute name="id" type="xs:integer" use="required">
+													<xs:annotation>
+														<xs:documentation>Unique identifier of the node</xs:documentation>
+													</xs:annotation>
+												</xs:attribute>
+												<xs:attribute name="type" type="xs:integer" use="required">
+													<xs:annotation>
+														<xs:documentation>Type of node. Use this attribute to model different nodes types. For instance, set type=0 to denote a depot, and type=1 to denote customer nodes</xs:documentation>
+													</xs:annotation>
+												</xs:attribute>
+												<xs:attribute name="trailer" type="xs:boolean">
+													<xs:annotation>
+														<xs:documentation>True if the node is accessible by a vehicle pulling a trailer and false otherwise</xs:documentation>
+													</xs:annotation>
+												</xs:attribute>
+											</xs:complexType>
+										</xs:element>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+							<xs:choice>
+								<xs:annotation>
+									<xs:documentation>The links of the network can be explicitly defined using a list of links or implicitly defined assuming that the network is complete</xs:documentation>
+								</xs:annotation>
+								<xs:element name="links">
+									<xs:annotation>
+										<xs:documentation>The set of links in the network</xs:documentation>
+									</xs:annotation>
+									<xs:complexType>
+										<xs:sequence>
+											<xs:element name="link" maxOccurs="unbounded">
+												<xs:annotation>
+													<xs:documentation>Defines a link on the network</xs:documentation>
+												</xs:annotation>
+												<xs:complexType>
+													<xs:sequence>
+														<xs:annotation>
+															<xs:documentation>Link parameters</xs:documentation>
+														</xs:annotation>
+														<xs:element name="length" type="positive_double" minOccurs="0">
+															<xs:annotation>
+																<xs:documentation>Length of the link</xs:documentation>
+															</xs:annotation>
+														</xs:element>
+														<xs:choice minOccurs="0">
+															<xs:annotation>
+																<xs:documentation>Travel time</xs:documentation>
+															</xs:annotation>
+															<xs:element name="travel_time" type="positive_double">
+																<xs:annotation>
+																	<xs:documentation>Deterministic travel time on the link</xs:documentation>
+																</xs:annotation>
+															</xs:element>
+															<xs:element name="td_travel_time" type="time_dependent_parameter_type" maxOccurs="unbounded">
+																<xs:annotation>
+																	<xs:documentation>Time-dependent travel times</xs:documentation>
+																</xs:annotation>
+															</xs:element>
+															<xs:element name="uncertain_travel_time" type="uncertain_parameter_type">
+																<xs:annotation>
+																	<xs:documentation>Uncertain travel time</xs:documentation>
+																</xs:annotation>
+															</xs:element>
+														</xs:choice>
+														<xs:choice minOccurs="0">
+															<xs:annotation>
+																<xs:documentation>Travel cost</xs:documentation>
+															</xs:annotation>
+															<xs:element name="travel_cost" type="positive_double">
+																<xs:annotation>
+																	<xs:documentation>Deterministic travel time on the link</xs:documentation>
+																</xs:annotation>
+															</xs:element>
+															<xs:element name="td_travel_cost" type="time_dependent_parameter_type" maxOccurs="unbounded">
+																<xs:annotation>
+																	<xs:documentation>Time-dependent travel costs</xs:documentation>
+																</xs:annotation>
+															</xs:element>
+															<xs:element name="uncertain_travel_cost" type="uncertain_parameter_type">
+																<xs:annotation>
+																	<xs:documentation>Uncertain travel cost</xs:documentation>
+																</xs:annotation>
+															</xs:element>
+														</xs:choice>
+														<xs:element ref="tw" minOccurs="0" maxOccurs="unbounded">
+															<xs:annotation>
+																<xs:documentation>Time windows. Use these elements to model the link's availability</xs:documentation>
+															</xs:annotation>
+														</xs:element>
+													</xs:sequence>
+													<xs:attribute name="tail" type="xs:integer" use="required">
+														<xs:annotation>
+															<xs:documentation>Identifier of the "tail" node of the link. The value must exist in the list of nodes. For example to model a link connecting nodes 1 and 2, the value for tail must be set to 1</xs:documentation>
+														</xs:annotation>
+													</xs:attribute>
+													<xs:attribute name="head" type="xs:integer" use="required">
+														<xs:annotation>
+															<xs:documentation>Identifier of the "head" node of the link. The value must exist in the list of nodes. For example to model a link connecting nodes 1 and 2, the value for head must be set to 2</xs:documentation>
+														</xs:annotation>
+													</xs:attribute>
+													<xs:attribute name="id" type="xs:integer">
+														<xs:annotation>
+															<xs:documentation>Unique identifier of the link</xs:documentation>
+														</xs:annotation>
+													</xs:attribute>
+													<xs:attribute name="directed" type="xs:boolean" default="false">
+														<xs:annotation>
+															<xs:documentation>Defines if the link is directed. Set is_directed=true if the link is directed and is_directed=false otherwise. The default value is false. Use this attribute to model for instance asymetric VRPs</xs:documentation>
+														</xs:annotation>
+													</xs:attribute>
+													<xs:attribute name="type" type="xs:integer">
+														<xs:annotation>
+															<xs:documentation>Defines a type for the link. Use this attribute to model different types of links. For instance service arcs and regular arcs in arc routing problems</xs:documentation>
+														</xs:annotation>
+													</xs:attribute>
+												</xs:complexType>
+											</xs:element>
+										</xs:sequence>
+										<xs:attribute name="symmetric" type="xs:boolean" use="required">
+											<xs:annotation>
+												<xs:documentation>Are the links symmetric? set "symmetric=true" if that is the case and "symmetric=false" otherwise.</xs:documentation>
+											</xs:annotation>
+										</xs:attribute>
+									</xs:complexType>
+								</xs:element>
+								<xs:sequence>
+									<xs:annotation>
+										<xs:documentation>Asume the network is complete</xs:documentation>
+									</xs:annotation>
+									<xs:choice>
+										<xs:annotation>
+											<xs:documentation>Distance type</xs:documentation>
+										</xs:annotation>
+										<xs:element name="euclidean" fixed="">
+											<xs:annotation>
+												<xs:documentation>Euclidean distances</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="manhattan" fixed="">
+											<xs:annotation>
+												<xs:documentation>Manhattan or cap driver distances</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="distance_calculator" type="xs:string"/>
+									</xs:choice>
+									<xs:choice>
+										<xs:annotation>
+											<xs:documentation>Rounding rule</xs:documentation>
+										</xs:annotation>
+										<xs:element name="ceil" fixed="">
+											<xs:annotation>
+												<xs:documentation>Round distances to the higher integer</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="floor" fixed="">
+											<xs:annotation>
+												<xs:documentation>Round distances to the lower integer</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="decimals" type="xs:int">
+											<xs:annotation>
+												<xs:documentation>Specify the number of decimals</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+									</xs:choice>
+								</xs:sequence>
+							</xs:choice>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="fleet">
+					<xs:annotation>
+						<xs:documentation>Defines the fleet of vehicles</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="vehicle_profile" maxOccurs="unbounded">
+								<xs:annotation>
+									<xs:documentation>Defines the profile of one type of vehicle. Use several profiles to model VRPs with heterogeneous fleet</xs:documentation>
+								</xs:annotation>
+								<xs:complexType>
+									<xs:sequence>
+										<xs:choice>
+											<xs:annotation>
+												<xs:documentation>Defines the departure node(s) of vehicles of the type</xs:documentation>
+											</xs:annotation>
+											<xs:element name="departure_from_any_node">
+												<xs:annotation>
+													<xs:documentation>Add this element if vehicles can start their routes at any node</xs:documentation>
+												</xs:annotation>
+												<xs:complexType/>
+											</xs:element>
+											<xs:element name="departure_node" type="xs:integer" maxOccurs="unbounded">
+												<xs:annotation>
+													<xs:documentation>Defines the node from where vehicles with this profile start their routes. The value of this element must be the id of one of the nodes of the network</xs:documentation>
+												</xs:annotation>
+											</xs:element>
+										</xs:choice>
+										<xs:choice>
+											<xs:annotation>
+												<xs:documentation>Defines the arrival node(s) of vehicles of the type</xs:documentation>
+											</xs:annotation>
+											<xs:element name="arrival_at_any_node">
+												<xs:annotation>
+													<xs:documentation>Add this element if vehicles can end their routes at any node</xs:documentation>
+												</xs:annotation>
+												<xs:complexType/>
+											</xs:element>
+											<xs:element name="arrival_node" type="xs:integer" maxOccurs="unbounded">
+												<xs:annotation>
+													<xs:documentation>Defines the node where vehicles with this profile finish their routes. The value of this element must be the id of one of the nodes of the network</xs:documentation>
+												</xs:annotation>
+											</xs:element>
+										</xs:choice>
+										<xs:group ref="storage">
+											<xs:annotation>
+												<xs:documentation>Defines the storage space of the vehicle</xs:documentation>
+											</xs:annotation>
+										</xs:group>
+										<xs:element name="max_travel_time" type="positive_double" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Defines the vehicle's maximum travel time</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="max_travel_distance" type="positive_double" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Defines the vehicle's maximum travel distance</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="speed_factor" type="xs:double" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Defines the vehicle's speed profile</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:sequence>
+											<xs:annotation>
+												<xs:documentation>Costs</xs:documentation>
+											</xs:annotation>
+											<xs:element name="fix_cost" type="positive_double" minOccurs="0">
+												<xs:annotation>
+													<xs:documentation>The cost of using the trailer</xs:documentation>
+												</xs:annotation>
+											</xs:element>
+											<xs:element name="cost_x_distance" type="positive_double" minOccurs="0">
+												<xs:annotation>
+													<xs:documentation>The cost of pulling the trailler for one unit of distance</xs:documentation>
+												</xs:annotation>
+											</xs:element>
+											<xs:element name="cost_x_time" type="positive_double" minOccurs="0">
+												<xs:annotation>
+													<xs:documentation>The cost of using the trailer for one time unit</xs:documentation>
+												</xs:annotation>
+											</xs:element>
+										</xs:sequence>
+										<xs:element name="resource" minOccurs="0" maxOccurs="unbounded">
+											<xs:annotation>
+												<xs:documentation>Defines the resources available to the vehicle (e.g. a tool). Set the value of this element as the amount of available resource</xs:documentation>
+											</xs:annotation>
+											<xs:complexType>
+												<xs:simpleContent>
+													<xs:extension base="xs:double">
+														<xs:attribute name="id" type="xs:int" use="required">
+															<xs:annotation>
+																<xs:documentation>The type of resource. Values for this attribute must correspond to existing resources</xs:documentation>
+															</xs:annotation>
+														</xs:attribute>
+													</xs:extension>
+												</xs:simpleContent>
+											</xs:complexType>
+										</xs:element>
+										<xs:element name="trailers" minOccurs="0" maxOccurs="unbounded">
+											<xs:annotation>
+												<xs:documentation>Defines the number of trilers that can be attached to the vehicle</xs:documentation>
+											</xs:annotation>
+											<xs:complexType>
+												<xs:simpleContent>
+													<xs:extension base="xs:positiveInteger">
+														<xs:attribute name="type" type="xs:positiveInteger" use="required"/>
+													</xs:extension>
+												</xs:simpleContent>
+											</xs:complexType>
+										</xs:element>
+										<xs:element ref="action" minOccurs="0" maxOccurs="unbounded"/>
+									</xs:sequence>
+									<xs:attribute name="type" type="xs:integer" use="required">
+										<xs:annotation>
+											<xs:documentation>Type of vehicle profile. Use this attribute to model VRPs with heterogeneous fleet</xs:documentation>
+										</xs:annotation>
+									</xs:attribute>
+									<xs:attribute name="number" type="xs:int">
+										<xs:annotation>
+											<xs:documentation>Defines the number of vehicles sharing this profile. Use this attribute to model fix-fleet VRPs</xs:documentation>
+										</xs:annotation>
+									</xs:attribute>
+								</xs:complexType>
+								<xs:key name="operation_type">
+									<xs:selector xpath="action"/>
+									<xs:field xpath="@type"/>
+								</xs:key>
+								<xs:unique name="trailer_type">
+									<xs:selector xpath="trailers"/>
+									<xs:field xpath="@type"/>
+								</xs:unique>
+							</xs:element>
+							<xs:element name="trailer_profile" minOccurs="0" maxOccurs="unbounded">
+								<xs:complexType>
+									<xs:sequence>
+										<xs:annotation>
+											<xs:documentation>Costs</xs:documentation>
+										</xs:annotation>
+										<xs:group ref="storage">
+											<xs:annotation>
+												<xs:documentation>Defines the lstorage space of the trailer</xs:documentation>
+											</xs:annotation>
+										</xs:group>
+										<xs:sequence>
+											<xs:annotation>
+												<xs:documentation>Costs</xs:documentation>
+											</xs:annotation>
+											<xs:element name="fix_cost" type="positive_double" minOccurs="0">
+												<xs:annotation>
+													<xs:documentation>The cost of using the trailer</xs:documentation>
+												</xs:annotation>
+											</xs:element>
+											<xs:element name="cost_x_distance" type="positive_double" minOccurs="0">
+												<xs:annotation>
+													<xs:documentation>The cost of pulling the trailler for one unit of distance</xs:documentation>
+												</xs:annotation>
+											</xs:element>
+											<xs:element name="cost_x_time" type="positive_double" minOccurs="0">
+												<xs:annotation>
+													<xs:documentation>The cost of using the trailer for one time unit</xs:documentation>
+												</xs:annotation>
+											</xs:element>
+										</xs:sequence>
+									</xs:sequence>
+									<xs:attribute name="type" type="xs:int" use="required">
+										<xs:annotation>
+											<xs:documentation>Type of trailer</xs:documentation>
+										</xs:annotation>
+									</xs:attribute>
+									<xs:attribute name="number" type="xs:int">
+										<xs:annotation>
+											<xs:documentation>Number of available containers of the type</xs:documentation>
+										</xs:annotation>
+									</xs:attribute>
+								</xs:complexType>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="requests">
+					<xs:annotation>
+						<xs:documentation>The set of requests in the instance</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="request" maxOccurs="unbounded">
+								<xs:annotation>
+									<xs:documentation>Defines a request on the network</xs:documentation>
+								</xs:annotation>
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element ref="tw" minOccurs="0" maxOccurs="unbounded">
+											<xs:annotation>
+												<xs:documentation>Model request time windows (e.g., VRPTW)</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:choice>
+											<xs:annotation>
+												<xs:documentation>Demand</xs:documentation>
+											</xs:annotation>
+											<xs:element name="quantity" type="xs:double"/>
+											<xs:element name="td_quantity" type="time_dependent_parameter_type"/>
+											<xs:element name="uncertain_quantity" type="uncertain_parameter_type"/>
+										</xs:choice>
+										<xs:element ref="demand" minOccurs="0" maxOccurs="unbounded">
+											<xs:annotation>
+												<xs:documentation>Model a customer demands (e.g., CVRP)</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="prize" type="xs:integer" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Prize collected for servicing the request (e.g. prize-collecting TSP)</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="release" type="xs:double" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Release date of the request (e.g. dynamic VRPs)</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="service_time" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>The service time needed to service the request (e.g. DVRP, Green VRP)</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="predecessors" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Set of preceeding requests. Use this element to model, for instnace, pick-ups preceding deliveries in PDPs</xs:documentation>
+											</xs:annotation>
+											<xs:complexType>
+												<xs:sequence>
+													<xs:element name="request" type="xs:integer" minOccurs="1" maxOccurs="unbounded">
+														<xs:annotation>
+															<xs:documentation>Identifiers of the preceding requests. The value for this element must correspond to the identifier of a request</xs:documentation>
+														</xs:annotation>
+													</xs:element>
+												</xs:sequence>
+											</xs:complexType>
+										</xs:element>
+										<xs:element name="successors" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Set of succeding requests. Use this element to model, for instnace, deliveries succeding pick-ups in PDPs</xs:documentation>
+											</xs:annotation>
+											<xs:complexType>
+												<xs:sequence>
+													<xs:element name="request" type="xs:integer" maxOccurs="unbounded">
+														<xs:annotation>
+															<xs:documentation>Identifiers of the succeding requests. The value for this element must correspond to the identifier of a request</xs:documentation>
+														</xs:annotation>
+													</xs:element>
+												</xs:sequence>
+											</xs:complexType>
+										</xs:element>
+										<xs:element name="skill" type="xs:int" minOccurs="0" maxOccurs="unbounded">
+											<xs:annotation>
+												<xs:documentation>The set of skills needed to complete the request (e.g., a skill on the technician routing problem). The value for this element must correspont to the identifier of one of the skills defined in the "skills" section</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="resource" minOccurs="0" maxOccurs="unbounded">
+											<xs:annotation>
+												<xs:documentation>The set of resources needed to complete the request (e.g., a tool on the technician routing problem). The value for this element is the "amount" of the resource needed</xs:documentation>
+											</xs:annotation>
+											<xs:complexType>
+												<xs:simpleContent>
+													<xs:extension base="xs:double">
+														<xs:attribute name="id" type="xs:int" use="required">
+															<xs:annotation>
+																<xs:documentation>The resource's identifier. The value for this attribute must correspond to the id of one of the existing resouces</xs:documentation>
+															</xs:annotation>
+														</xs:attribute>
+													</xs:extension>
+												</xs:simpleContent>
+											</xs:complexType>
+										</xs:element>
+									</xs:sequence>
+									<xs:attribute name="id" type="xs:integer" use="required">
+										<xs:annotation>
+											<xs:documentation>The unique identifier of the request</xs:documentation>
+										</xs:annotation>
+									</xs:attribute>
+									<xs:attribute name="type" type="xs:integer">
+										<xs:annotation>
+											<xs:documentation>The type of request. Use this attribute to model requests of different nature. For instnace, set type=0 for pick-ups and type=1 for deliveries in PDPs</xs:documentation>
+										</xs:annotation>
+									</xs:attribute>
+									<xs:attribute name="node" type="xs:integer">
+										<xs:annotation>
+											<xs:documentation>Identifier of the node to which the request is attached (e.g., node routing problems). The value for this attribute must correspond to the identifier of one of the nodes of the network</xs:documentation>
+										</xs:annotation>
+									</xs:attribute>
+									<xs:attribute name="link" type="xs:integer">
+										<xs:annotation>
+											<xs:documentation>Identifier of the arc to which the request is attached (e.g. arc routing problems). The value for this attribute must correspond to the identifier of one of the links of the network</xs:documentation>
+										</xs:annotation>
+									</xs:attribute>
+								</xs:complexType>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="resources" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Defines the set of resources</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="resource" maxOccurs="unbounded">
+								<xs:annotation>
+									<xs:documentation>Models a resource (e.g., a tool, a spare part, a skill)</xs:documentation>
+								</xs:annotation>
+								<xs:complexType mixed="true">
+									<xs:attribute name="id" type="xs:integer" use="required">
+										<xs:annotation>
+											<xs:documentation>Defines the unique identifier of the resource</xs:documentation>
+										</xs:annotation>
+									</xs:attribute>
+									<xs:attribute name="renewable" type="xs:boolean" use="required">
+										<xs:annotation>
+											<xs:documentation>True if the resource is renewable (e.g., a tool) and false otherwise (e.g., a spare part)</xs:documentation>
+										</xs:annotation>
+									</xs:attribute>
+									<xs:attribute name="name" type="xs:string" use="required">
+										<xs:annotation>
+											<xs:documentation>Name of the resource</xs:documentation>
+										</xs:annotation>
+									</xs:attribute>
+								</xs:complexType>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="drivers" minOccurs="0">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="driver_profile" maxOccurs="unbounded">
+								<xs:complexType>
+									<xs:sequence>
+										<xs:choice>
+											<xs:annotation>
+												<xs:documentation>Compatible vehicles</xs:documentation>
+											</xs:annotation>
+											<xs:element name="compatible_with_all_vehicles">
+												<xs:annotation>
+													<xs:documentation>Add this element if the driver is compatible with all types of vehicles</xs:documentation>
+												</xs:annotation>
+												<xs:complexType/>
+											</xs:element>
+											<xs:element name="compatible_vehicle_type" type="xs:int" maxOccurs="unbounded">
+												<xs:annotation>
+													<xs:documentation>Add one of these elements for each compatible vehicle type</xs:documentation>
+												</xs:annotation>
+											</xs:element>
+										</xs:choice>
+										<xs:element name="skill" minOccurs="0" maxOccurs="unbounded">
+											<xs:annotation>
+												<xs:documentation>The list of skills of the driver</xs:documentation>
+											</xs:annotation>
+											<xs:complexType mixed="true">
+												<xs:attribute name="id" type="xs:integer" use="required">
+													<xs:annotation>
+														<xs:documentation>Unique identifier of the skill</xs:documentation>
+													</xs:annotation>
+												</xs:attribute>
+											</xs:complexType>
+										</xs:element>
+										<xs:element name="workload_profile" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation> Represents the amount of work assigned or expected from the driver</xs:documentation>
+											</xs:annotation>
+											<xs:complexType>
+												<xs:sequence>
+													<xs:element name="max_work_time" type="xs:double" minOccurs="0">
+														<xs:annotation>
+															<xs:documentation>Maximum working time of the driver</xs:documentation>
+														</xs:annotation>
+													</xs:element>
+													<xs:element name="max_driving_time" type="xs:double" minOccurs="0">
+														<xs:annotation>
+															<xs:documentation>Maximum driving time</xs:documentation>
+														</xs:annotation>
+													</xs:element>
+													<xs:element ref="tw" minOccurs="0" maxOccurs="unbounded">
+														<xs:annotation>
+															<xs:documentation>Driver's availability time windows. May model either breaks or availability times</xs:documentation>
+														</xs:annotation>
+													</xs:element>
+												</xs:sequence>
+											</xs:complexType>
+										</xs:element>
+									</xs:sequence>
+									<xs:attribute name="type" type="xs:int" use="required">
+										<xs:annotation>
+											<xs:documentation>Unique identifier of the driver profile</xs:documentation>
+										</xs:annotation>
+									</xs:attribute>
+								</xs:complexType>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+			</xs:all>
+		</xs:complexType>
+		<xs:keyref name="trailer_profile_exists" refer="trailer_type_key">
+			<xs:selector xpath="fleet/vehicle_profile/trailers"/>
+			<xs:field xpath="@type"/>
+		</xs:keyref>
+		<xs:key name="trailer_type_key">
+			<xs:selector xpath="fleet/trailer_profile"/>
+			<xs:field xpath="@type"/>
+		</xs:key>
+		<xs:keyref name="arrival_node_exists" refer="node_id">
+			<xs:selector xpath="fleet/vehicle_profile/arrival_node"/>
+			<xs:field xpath="."/>
+		</xs:keyref>
+		<xs:keyref name="departure_node_exists" refer="node_id">
+			<xs:selector xpath="fleet/vehicle_profile/departure_node"/>
+			<xs:field xpath="."/>
+		</xs:keyref>
+		<xs:keyref name="vehicle_profile_exists_node" refer="vehicle_type_id">
+			<xs:selector xpath="network/nodes/node/compatible_vehicle"/>
+			<xs:field xpath="."/>
+		</xs:keyref>
+		<xs:key name="driver_profile_id">
+			<xs:selector xpath="drivers/driver_profile"/>
+			<xs:field xpath="@type"/>
+		</xs:key>
+		<xs:key name="vehicle_type_id">
+			<xs:selector xpath="fleet/vehicle_profile"/>
+			<xs:field xpath="@type"/>
+		</xs:key>
+		<xs:key name="skill_id">
+			<xs:selector xpath="drivers/driver_profile/skill"/>
+			<xs:field xpath="@id"/>
+		</xs:key>
+		<xs:key name="resource_id">
+			<xs:selector xpath="resources/resource"/>
+			<xs:field xpath="@id"/>
+		</xs:key>
+		<xs:key name="request_id">
+			<xs:selector xpath="requests/request"/>
+			<xs:field xpath="@id"/>
+		</xs:key>
+		<xs:key name="node_id">
+			<xs:selector xpath="network/nodes/node"/>
+			<xs:field xpath="@id"/>
+		</xs:key>
+		<xs:keyref name="skill_exists_request" refer="skill_id">
+			<xs:selector xpath="requests/request"/>
+			<xs:field xpath="skill"/>
+		</xs:keyref>
+		<xs:keyref name="resource_exists_request" refer="resource_id">
+			<xs:selector xpath="requests/request/resource"/>
+			<xs:field xpath="@id"/>
+		</xs:keyref>
+		<xs:keyref name="resource_exists_fleet" refer="resource_id">
+			<xs:selector xpath="fleet/vehicle_profile/resource"/>
+			<xs:field xpath="@id"/>
+		</xs:keyref>
+		<xs:keyref name="predecessor_request_exists" refer="request_id">
+			<xs:selector xpath="requests/request/predecessors/request"/>
+			<xs:field xpath="."/>
+		</xs:keyref>
+		<xs:keyref name="successor_request_exists" refer="request_id">
+			<xs:selector xpath="requests/request/successors/request"/>
+			<xs:field xpath="."/>
+		</xs:keyref>
+		<xs:keyref name="link_exists" refer="link_id">
+			<xs:selector xpath="requests/request"/>
+			<xs:field xpath="@link"/>
+		</xs:keyref>
+		<xs:keyref name="node_exists" refer="node_id">
+			<xs:selector xpath="requests/request"/>
+			<xs:field xpath="@node"/>
+		</xs:keyref>
+		<xs:unique name="link_id">
+			<xs:selector xpath="network/links/link"/>
+			<xs:field xpath="@id"/>
+		</xs:unique>
+		<xs:keyref name="head_node_exists" refer="node_id">
+			<xs:selector xpath="network/links/link"/>
+			<xs:field xpath="@head"/>
+		</xs:keyref>
+		<xs:keyref name="tail_node_exists" refer="node_id">
+			<xs:selector xpath="network/links/link"/>
+			<xs:field xpath="@tail"/>
+		</xs:keyref>
+		<xs:keyref name="compatible_vehicle_exists" refer="vehicle_type_id">
+			<xs:selector xpath="drivers/driver_profile/compatible_vehicle_type"/>
+			<xs:field xpath="."/>
+		</xs:keyref>
+	</xs:element>
+	<xs:element name="location">
+		<xs:annotation>
+			<xs:documentation>Defines a geographical location</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:choice>
+				<xs:annotation>
+					<xs:documentation>A location may be deffined by one, and only one, of the following features: a set of Euclidean coordinates, a set of GPS coordinates, or a user custom feature</xs:documentation>
+				</xs:annotation>
+				<xs:sequence>
+					<xs:annotation>
+						<xs:documentation>Euclidean coordinates</xs:documentation>
+					</xs:annotation>
+					<xs:element name="cx" type="xs:double">
+						<xs:annotation>
+							<xs:documentation>Coordinate value on the x axis</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="cy" type="xs:double">
+						<xs:annotation>
+							<xs:documentation>Coordinate value on the y axis</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="cz" type="xs:double" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Coordinate value on the z axis</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+				<xs:sequence>
+					<xs:annotation>
+						<xs:documentation>GPS Coordinates</xs:documentation>
+					</xs:annotation>
+					<xs:element name="latitude" type="xs:double">
+						<xs:annotation>
+							<xs:documentation>Latitude</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="longitude" type="xs:double">
+						<xs:annotation>
+							<xs:documentation>Longitude</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:choice>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="random_variable" type="random_variable_type">
+		<xs:annotation>
+			<xs:documentation>Defines a probability distribution</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:element name="tw">
+		<xs:annotation>
+			<xs:documentation>Defines a time window (TW). Time windows may be used to model periods of availability/unavailability for customers, drivers, resources, vehicles, etc. </xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="tw_type"/>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+	<xs:complexType name="dimensions_type">
+		<xs:annotation>
+			<xs:documentation>Defines the dimensions of an object</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="width" type="positive_double">
+				<xs:annotation>
+					<xs:documentation>The width</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="height" type="positive_double">
+				<xs:annotation>
+					<xs:documentation>The height</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="depth" type="positive_double" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>The depth</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="random_variable_type">
+		<xs:annotation>
+			<xs:documentation>Defines a random variable</xs:documentation>
+		</xs:annotation>
+		<xs:choice>
+			<xs:element name="moment" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>A parameter of the distribution (e.g., mean or variance)</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:simpleContent>
+						<xs:extension base="xs:double">
+							<xs:attribute name="name" type="xs:string">
+								<xs:annotation>
+									<xs:documentation>Name of the moment (e.g., mean, variance)</xs:documentation>
+								</xs:annotation>
+							</xs:attribute>
+							<xs:attribute name="number" type="xs:integer" use="required">
+								<xs:annotation>
+									<xs:documentation>Moment number. For instance set moment_number=1 to define the mean, moment_number=2 to define the variance, moment_number=3 to define the skewness, etc.</xs:documentation>
+								</xs:annotation>
+							</xs:attribute>
+						</xs:extension>
+					</xs:simpleContent>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="parameter" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>A parameter of the distribution</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:simpleContent>
+						<xs:extension base="xs:double">
+							<xs:attribute name="name" type="xs:string" use="required">
+								<xs:annotation>
+									<xs:documentation>Name of the parameter (e.g., lambda in Poisson distributions)</xs:documentation>
+								</xs:annotation>
+							</xs:attribute>
+						</xs:extension>
+					</xs:simpleContent>
+				</xs:complexType>
+			</xs:element>
+		</xs:choice>
+		<xs:attribute name="distribution" type="xs:string" use="required">
+			<xs:annotation>
+				<xs:documentation>Distibution type (e.g., normal or Poisson)</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="time_dependent_parameter_type" mixed="false">
+		<xs:annotation>
+			<xs:documentation>Defines a parameter which value is time-dependent (e.g., travel time or service time)</xs:documentation>
+		</xs:annotation>
+		<xs:simpleContent>
+			<xs:extension base="xs:double">
+				<xs:attribute name="start" type="xs:int" use="required">
+					<xs:annotation>
+						<xs:documentation>Start point (in time) of the period (e.g., rush-hour or off-peak hours)</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="end" type="xs:int" use="required">
+					<xs:annotation>
+						<xs:documentation>Start point (in time) of the period (e.g., rush-hour or off-peak hours)</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+			</xs:extension>
+		</xs:simpleContent>
+	</xs:complexType>
+	<xs:complexType name="uncertain_parameter_type">
+		<xs:annotation>
+			<xs:documentation>Defines a parameter which value is uncertain (e.g., stochastic travel time or stochastic demand)</xs:documentation>
+		</xs:annotation>
+		<xs:choice>
+			<xs:element ref="random_variable"/>
+			<xs:element name="scenario" minOccurs="2" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>Describes a scenario</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:simpleContent>
+						<xs:extension base="xs:double">
+							<xs:attribute name="id" use="required">
+								<xs:annotation>
+									<xs:documentation>Scenario id</xs:documentation>
+								</xs:annotation>
+							</xs:attribute>
+							<xs:attribute name="probability" type="probability" use="required">
+								<xs:annotation>
+									<xs:documentation>Probability of occurence of the scenario</xs:documentation>
+								</xs:annotation>
+							</xs:attribute>
+						</xs:extension>
+					</xs:simpleContent>
+				</xs:complexType>
+			</xs:element>
+		</xs:choice>
+	</xs:complexType>
+	<xs:complexType name="tw_type">
+		<xs:annotation>
+			<xs:documentation>Defines a time window type</xs:documentation>
+		</xs:annotation>
+		<xs:choice>
+			<xs:annotation>
+				<xs:documentation>There are two ways to represent a time window either with a pair (start,end) representing the start and end time of the TW or by a parameter (period) representing a single-period TW</xs:documentation>
+			</xs:annotation>
+			<xs:sequence>
+				<xs:element name="start">
+					<xs:annotation>
+						<xs:documentation>Point in the time horizon at which the time window begins</xs:documentation>
+					</xs:annotation>
+					<xs:complexType mixed="true">
+						<xs:simpleContent>
+							<xs:extension base="xs:int">
+								<xs:attribute name="soft" type="xs:boolean" default="true">
+									<xs:annotation>
+										<xs:documentation>Use this attribute to model the flexibility of the start of the time window (set it to true if the start of the window is a hard constraint, false otherwise)</xs:documentation>
+									</xs:annotation>
+								</xs:attribute>
+							</xs:extension>
+						</xs:simpleContent>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="end">
+					<xs:annotation>
+						<xs:documentation>Point in the time horizon at which the time window ends</xs:documentation>
+					</xs:annotation>
+					<xs:complexType mixed="true">
+						<xs:simpleContent>
+							<xs:extension base="xs:int">
+								<xs:attribute name="soft" type="xs:boolean" default="true">
+									<xs:annotation>
+										<xs:documentation>Use this attribute to model the flexibility of the end of the time window (set it to true if the start of the window is a hard constraint, false otherwise)</xs:documentation>
+									</xs:annotation>
+								</xs:attribute>
+							</xs:extension>
+						</xs:simpleContent>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+			<xs:element name="period">
+				<xs:annotation>
+					<xs:documentation>Point in the time horizon representing the time window</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:simpleContent>
+						<xs:extension base="xs:int">
+							<xs:attribute name="soft" type="xs:boolean"/>
+						</xs:extension>
+					</xs:simpleContent>
+				</xs:complexType>
+			</xs:element>
+		</xs:choice>
+	</xs:complexType>
+	<xs:simpleType name="positive_double">
+		<xs:annotation>
+			<xs:documentation>Double restricted to be greater than or equal to 0</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:double">
+			<xs:minInclusive value="0.00"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="probability">
+		<xs:annotation>
+			<xs:documentation>Double restricted to be greater than or equal to 0 and lower than or equal to 1</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:double">
+			<xs:minInclusive value="0.00"/>
+			<xs:maxInclusive value="1"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:group name="storage">
+		<xs:sequence>
+			<xs:annotation>
+				<xs:documentation>Defines the storage unit</xs:documentation>
+			</xs:annotation>
+			<xs:choice minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Defines the storage capacity. Two options are avaliable to define the capacity: a single element representing a "global" capacity (e.g., CVRP) or a pair of elements defining the maximum weight and volume.</xs:documentation>
+				</xs:annotation>
+				<xs:element name="capacity" type="positive_double">
+					<xs:annotation>
+						<xs:documentation>The global storage capacity (e.g., CVRP)</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:sequence>
+					<xs:element name="max_weight" type="positive_double">
+						<xs:annotation>
+							<xs:documentation>The maximum weight that can be stored</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="max_volume" type="positive_double">
+						<xs:annotation>
+							<xs:documentation>The maximum weight that can be stored</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:choice>
+			<xs:element ref="dimensions" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Defines the dimensions of the storage unit</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:sequence minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Defines the storage unit compartments</xs:documentation>
+				</xs:annotation>
+				<xs:element ref="compartment" minOccurs="2" maxOccurs="unbounded">
+					<xs:annotation>
+						<xs:documentation>Defines a compartment. Use this element to model multicompartment VRPs</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+			</xs:sequence>
+		</xs:sequence>
+	</xs:group>
+</xs:schema>
