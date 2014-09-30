@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>vrprep-model</artifactId>
 	<version>0.0.2-SNAPSHOT</version>
@@ -23,6 +24,46 @@
 			</resource>
 		</resources>
 		<plugins>
+			<plugin>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.1</version>
+				<configuration>
+					<source />
+					<target />
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>jaxb2-maven-plugin</artifactId>
+				<version>1.6</version>
+				<executions>
+					<execution>
+						<id>xjc-instance</id>
+						<goals>
+							<goal>xjc</goal>
+						</goals>
+						<configuration>
+							<schemaDirectory>${project.basedir}/schemas</schemaDirectory>
+							<schemaFiles>instance.xsd</schemaFiles>
+							<packageName>org.vrprep.model.instance</packageName>
+							<outputDirectory>${project.basedir}/src</outputDirectory>
+						</configuration>
+					</execution>
+					<execution>
+						<id>xjc-solution</id>
+						<goals>
+							<goal>xjc</goal>
+						</goals>
+						<configuration>
+							<schemaDirectory>${project.basedir}/schemas</schemaDirectory>
+							<schemaFiles>solution.xsd</schemaFiles>
+							<packageName>org.vrprep.model.solution</packageName>
+							<outputDirectory>${project.basedir}/src</outputDirectory>
+							<clearOutputDir>false</clearOutputDir>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-source-plugin</artifactId>
@@ -50,64 +91,6 @@
 				</executions>
 			</plugin>
 			<plugin>
-				<groupId>org.sonatype.plugins</groupId>
-				<artifactId>nexus-staging-maven-plugin</artifactId>
-				<version>1.6.3</version>
-				<extensions>true</extensions>
-				<configuration>
-					<serverId>ossrh</serverId>
-					<nexusUrl>https://oss.sonatype.org/</nexusUrl>
-					<autoReleaseAfterClose>true</autoReleaseAfterClose>
-				</configuration>
-			</plugin>
-			<plugin>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.1</version>
-				<configuration>
-					<source />
-					<target />
-				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-release-plugin</artifactId>
-				<version>2.5.1</version>
-			</plugin>
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>jaxb2-maven-plugin</artifactId>
-				<version>1.5</version>
-				<executions>
-					<execution>
-						<id>xjc-instance</id>
-						<goals>
-							<goal>xjc</goal>
-						</goals>
-						<configuration>
-							<schemaDirectory>${project.basedir}/schemas</schemaDirectory>
-							<schemaFiles>instance.xsd</schemaFiles>
-							<packageName>org.vrprep.model.instance</packageName>
-							<outputDirectory>${project.basedir}/src</outputDirectory>
-							<staleFile>${project.build.directory}/jaxb2/.xjcStaleFlag-instance</staleFile>
-						</configuration>
-					</execution>
-					<execution>
-						<id>xjc-solution</id>
-						<goals>
-							<goal>xjc</goal>
-						</goals>
-						<configuration>
-							<schemaDirectory>${project.basedir}/schemas</schemaDirectory>
-							<schemaFiles>solution.xsd</schemaFiles>
-							<packageName>org.vrprep.model.solution</packageName>
-							<outputDirectory>${project.basedir}/src</outputDirectory>
-							<staleFile>${project.build.directory}/jaxb2/.xjcStaleFlag-solution</staleFile>
-							<clearOutputDir>false</clearOutputDir>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-gpg-plugin</artifactId>
 				<version>1.5</version>
@@ -120,6 +103,20 @@
 						</goals>
 					</execution>
 				</executions>
+			</plugin><plugin>
+				<groupId>org.sonatype.plugins</groupId>
+				<artifactId>nexus-staging-maven-plugin</artifactId>
+				<version>1.6.3</version>
+				<extensions>true</extensions>
+				<configuration>
+					<serverId>ossrh</serverId>
+					<nexusUrl>https://oss.sonatype.org/</nexusUrl>
+					<autoReleaseAfterClose>true</autoReleaseAfterClose>
+				</configuration>
+			</plugin><plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-release-plugin</artifactId>
+				<version>2.5.1</version>
 			</plugin>
 		</plugins>
 	</build>
@@ -141,7 +138,7 @@
 			<name>Jorge Mendoza</name>
 		</developer>
 		<developer>
-			<name>Hubert Lobit</name>
+			<name>Maxim Hoskins</name>
 		</developer>
 	</developers>
 	<description>VRP-REP is a web sharing platform that put together data dedicated to Vehicle Routing Problem, that mainly uses a recommended data format described in an xsd file. This repository includes the model files used to marshall/unmarshall XML data instances using JAXB.</description>
@@ -149,6 +146,6 @@
 		<connection>scm:git:git@github.com:VRP-REP/VRPREPModel.git</connection>
 		<url>scm:git:git@github.com:VRP-REP/VRPREPModel.git</url>
 		<developerConnection>scm:git:git@github.com:VRP-REP/VRPREPModel.git</developerConnection>
-	  <tag>HEAD</tag>
-  </scm>
+		<tag>HEAD</tag>
+	</scm>
 </project>
