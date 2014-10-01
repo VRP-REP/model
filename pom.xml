@@ -2,6 +2,10 @@
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>vrprep-model</artifactId>
 	<version>0.1.1-SNAPSHOT</version>
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.build.outputEncoding>UTF-8</project.build.outputEncoding>
+	</properties>
 	<distributionManagement>
 		<snapshotRepository>
 			<id>ossrh</id>
@@ -13,15 +17,6 @@
 		</repository>
 	</distributionManagement>
 	<build>
-		<sourceDirectory>src</sourceDirectory>
-		<resources>
-			<resource>
-				<directory>src</directory>
-				<excludes>
-					<exclude>**/*.java</exclude>
-				</excludes>
-			</resource>
-		</resources>
 		<plugins>
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
@@ -45,7 +40,7 @@
 							<schemaDirectory>${project.basedir}/schemas</schemaDirectory>
 							<schemaFiles>instance.xsd</schemaFiles>
 							<packageName>org.vrprep.model.instance</packageName>
-							<outputDirectory>${project.basedir}/src</outputDirectory>
+							<outputDirectory>${project.basedir}/src/main/java</outputDirectory>
 							<staleFile>${project.build.directory}/jaxb2/.xjcStaleFlag-instance</staleFile>
 						</configuration>
 					</execution>
@@ -58,7 +53,7 @@
 							<schemaDirectory>${project.basedir}/schemas</schemaDirectory>
 							<schemaFiles>solution.xsd</schemaFiles>
 							<packageName>org.vrprep.model.solution</packageName>
-							<outputDirectory>${project.basedir}/src</outputDirectory>
+							<outputDirectory>${project.basedir}/src/main/java</outputDirectory>
 							<staleFile>${project.build.directory}/jaxb2/.xjcStaleFlag-solution</staleFile>
 							<clearOutputDir>false</clearOutputDir>
 						</configuration>
