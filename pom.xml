@@ -2,7 +2,7 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>vrprep-model</artifactId>
-	<version>0.1.0-SNAPSHOT</version>
+	<version>0.1.0</version>
 	<distributionManagement>
 		<snapshotRepository>
 			<id>ossrh</id>
@@ -35,7 +35,7 @@
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>jaxb2-maven-plugin</artifactId>
-				<version>1.6</version>
+				<version>1.5</version>
 				<executions>
 					<execution>
 						<id>xjc-instance</id>
@@ -47,6 +47,7 @@
 							<schemaFiles>instance.xsd</schemaFiles>
 							<packageName>org.vrprep.model.instance</packageName>
 							<outputDirectory>${project.basedir}/src</outputDirectory>
+							<staleFile>${project.build.directory}/jaxb2/.xjcStaleFlag-instance</staleFile>
 						</configuration>
 					</execution>
 					<execution>
@@ -59,6 +60,7 @@
 							<schemaFiles>solution.xsd</schemaFiles>
 							<packageName>org.vrprep.model.solution</packageName>
 							<outputDirectory>${project.basedir}/src</outputDirectory>
+							<staleFile>${project.build.directory}/jaxb2/.xjcStaleFlag-solution</staleFile>
 							<clearOutputDir>false</clearOutputDir>
 						</configuration>
 					</execution>
@@ -103,7 +105,8 @@
 						</goals>
 					</execution>
 				</executions>
-			</plugin><plugin>
+			</plugin>
+			<plugin>
 				<groupId>org.sonatype.plugins</groupId>
 				<artifactId>nexus-staging-maven-plugin</artifactId>
 				<version>1.6.3</version>
@@ -113,7 +116,8 @@
 					<nexusUrl>https://oss.sonatype.org/</nexusUrl>
 					<autoReleaseAfterClose>true</autoReleaseAfterClose>
 				</configuration>
-			</plugin><plugin>
+			</plugin>
+			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-release-plugin</artifactId>
 				<version>2.5.1</version>
@@ -146,6 +150,6 @@
 		<connection>scm:git:git@github.com:VRP-REP/VRPREPModel.git</connection>
 		<url>scm:git:git@github.com:VRP-REP/VRPREPModel.git</url>
 		<developerConnection>scm:git:git@github.com:VRP-REP/VRPREPModel.git</developerConnection>
-		<tag>HEAD</tag>
+		<tag>vrprep-model-0.1.0</tag>
 	</scm>
 </project>
