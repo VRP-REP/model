@@ -37,7 +37,6 @@
 							<goal>xjc</goal>
 						</goals>
 						<configuration>
-							<schemaDirectory>${project.basedir}/schemas</schemaDirectory>
 							<schemaFiles>instance.xsd</schemaFiles>
 							<packageName>org.vrprep.model.instance</packageName>
 							<outputDirectory>${project.basedir}/src/main/java</outputDirectory>
@@ -50,7 +49,6 @@
 							<goal>xjc</goal>
 						</goals>
 						<configuration>
-							<schemaDirectory>${project.basedir}/schemas</schemaDirectory>
 							<schemaFiles>solution.xsd</schemaFiles>
 							<packageName>org.vrprep.model.solution</packageName>
 							<outputDirectory>${project.basedir}/src/main/java</outputDirectory>
