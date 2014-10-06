@@ -58,7 +58,6 @@
 						<configuration>
 							<schemaFiles>instance.xsd</schemaFiles>
 							<packageName>org.vrprep.model.instance</packageName>
-							<outputDirectory>${project.basedir}/src/main/java</outputDirectory>
 							<staleFile>${project.build.directory}/jaxb2/.xjcStaleFlag-instance</staleFile>
 						</configuration>
 					</execution>
@@ -70,7 +69,6 @@
 						<configuration>
 							<schemaFiles>solution.xsd</schemaFiles>
 							<packageName>org.vrprep.model.solution</packageName>
-							<outputDirectory>${project.basedir}/src/main/java</outputDirectory>
 							<staleFile>${project.build.directory}/jaxb2/.xjcStaleFlag-solution</staleFile>
 							<clearOutputDir>false</clearOutputDir>
 						</configuration>
