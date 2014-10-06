@@ -2,6 +2,8 @@
 .classpath
 .project
 /.settings/
-/src/main/java
 /bin/
 /target/
+
+/src/main/java/org/vrprep/model/instance
+/src/main/java/org/vrprep/model/solution
