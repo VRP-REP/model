@@ -15,7 +15,7 @@ The best way to go is to add the following to your pom.xml :
 <dependency>
     <groupId>org.vrp-rep</groupId>
     <artifactId>vrprep-model</artifactId>
-    <version>0.1.3</version>
+    <version>0.1.4</version>
 </dependency>
 ```
 
