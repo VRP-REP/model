@@ -25,5 +25,9 @@
 				</xs:element>
 			</xs:sequence>
 		</xs:complexType>
+		<xs:unique name="UniqueSolutionInstance">
+			<xs:selector xpath="solution"/>
+			<xs:field xpath="@instance"/>
+		</xs:unique>
 	</xs:element>
 </xs:schema>
