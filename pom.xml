@@ -1,7 +1,35 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
+	<groupId>org.vrp-rep</groupId>
 	<artifactId>vrprep-model</artifactId>
 	<version>0.1.5-SNAPSHOT</version>
+	<name>VRP-REP model files</name>
+	<description>VRP-REP is a web sharing platform that put together data dedicated to Vehicle Routing Problem, that mainly uses a recommended data format described in an xsd file. This repository includes the model files used to marshall/unmarshall XML data instances using JAXB.</description>
+	<url>https://github.com/VRP-REP/VRPREPModel</url>
+	<scm>
+		<connection>scm:git:git@github.com:VRP-REP/VRPREPModel.git</connection>
+		<url>scm:git:git@github.com:VRP-REP/VRPREPModel.git</url>
+		<developerConnection>scm:git:git@github.com:VRP-REP/VRPREPModel.git</developerConnection>
+		<tag>HEAD</tag>
+	</scm>
+	<organization>
+		<name>VRP-REP</name>
+		<url>http://www.vrp-rep.org</url>
+	</organization>
+	<developers>
+		<developer>
+			<name>Jorge Mendoza</name>
+		</developer>
+		<developer>
+			<name>Maxim Hoskins</name>
+		</developer>
+	</developers>
+	<licenses>
+		<license>
+			<name>MIT License</name>
+			<url>http://www.opensource.org/licenses/mit-license.php</url>
+		</license>
+	</licenses>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.build.outputEncoding>UTF-8</project.build.outputEncoding>
@@ -28,13 +56,6 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
 				<version>2.17</version>
-				<dependencies>
-					<dependency>
-						<groupId>org.apache.maven.surefire</groupId>
-						<artifactId>surefire-junit47</artifactId>
-						<version>2.17</version>
-					</dependency>
-				</dependencies>
 			</plugin>
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
@@ -135,45 +156,17 @@
 			</plugin>
 		</plugins>
 	</build>
-	<licenses>
-		<license>
-			<name>MIT License</name>
-			<url>http://www.opensource.org/licenses/mit-license.php</url>
-		</license>
-	</licenses>
-	<organization>
-		<name>VRP-REP</name>
-		<url>http://www.vrp-rep.org</url>
-	</organization>
-	<groupId>org.vrp-rep</groupId>
-	<name>VRP-REP model files</name>
-	<url>https://github.com/VRP-REP/VRPREPModel</url>
-	<developers>
-		<developer>
-			<name>Jorge Mendoza</name>
-		</developer>
-		<developer>
-			<name>Maxim Hoskins</name>
-		</developer>
-	</developers>
-	<description>VRP-REP is a web sharing platform that put together data dedicated to Vehicle Routing Problem, that mainly uses a recommended data format described in an xsd file. This repository includes the model files used to marshall/unmarshall XML data instances using JAXB.</description>
-	<scm>
-		<connection>scm:git:git@github.com:VRP-REP/VRPREPModel.git</connection>
-		<url>scm:git:git@github.com:VRP-REP/VRPREPModel.git</url>
-		<developerConnection>scm:git:git@github.com:VRP-REP/VRPREPModel.git</developerConnection>
-		<tag>HEAD</tag>
-	</scm>
 	<dependencies>
-		<dependency>
-			<groupId>javax.xml.bind</groupId>
-			<artifactId>jaxb-api</artifactId>
-			<version>2.2.7</version>
-		</dependency>
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<version>4.11</version>
 			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>javax.xml.bind</groupId>
+			<artifactId>jaxb-api</artifactId>
+			<version>2.2.7</version>
 		</dependency>
 	</dependencies>
 </project>
