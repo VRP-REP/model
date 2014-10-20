@@ -5,11 +5,11 @@
 	<version>0.2.2-SNAPSHOT</version>
 	<name>VRP-REP model files</name>
 	<description>VRP-REP is a web sharing platform that put together data dedicated to Vehicle Routing Problem, that mainly uses a recommended data format described in an xsd file. This repository includes the model files used to marshall/unmarshall XML data instances using JAXB.</description>
-	<url>https://github.com/VRP-REP/VRPREPModel</url>
+	<url>https://github.com/VRP-REP/model</url>
 	<scm>
-		<connection>scm:git:git@github.com:VRP-REP/VRPREPModel.git</connection>
-		<url>scm:git:git@github.com:VRP-REP/VRPREPModel.git</url>
-		<developerConnection>scm:git:git@github.com:VRP-REP/VRPREPModel.git</developerConnection>
+		<connection>scm:git:git@github.com:VRP-REP/model.git</connection>
+		<url>scm:git:git@github.com:VRP-REP/model.git</url>
+		<developerConnection>scm:git:git@github.com:VRP-REP/model.git</developerConnection>
 		<tag>HEAD</tag>
 	</scm>
 	<organization>
