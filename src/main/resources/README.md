@@ -1,7 +1,7 @@
-VRP-REP model files
+${project.name}
 ======================
 
-VRP-REP model files is a maven project. It simply contains XML schema files, used to describe Vehicle Routing Problem instances files on the web application [VRP-REP](http://www.vrp-rep.org).
+${project.name} is a maven project. It simply contains XML schema files, used to describe Vehicle Routing Problem instances files on the web application [VRP-REP](http://www.vrp-rep.org).
 
 How do I use the model in my own project ?
 ------------------------------------------
@@ -13,8 +13,8 @@ The best way to go is to add the following to your pom.xml :
 
 ```xml
 <dependency>
-    <groupId>org.vrp-rep</groupId>
-    <artifactId>vrprep-model</artifactId>
+    <groupId>${project.groupId}</groupId>
+    <artifactId>${project.artifactId}</artifactId>
     <version>LATEST</version>
 </dependency>
 ```
