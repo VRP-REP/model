@@ -96,12 +96,19 @@
 					</xs:element>
 				</xs:choice>
 			</xs:sequence>
-			<xs:attribute name="type" type="xs:integer" use="required">
+			<xs:attribute name="number" type="xs:integer" use="required">
 				<xs:annotation>
-					<xs:documentation>Defines a type of compartment</xs:documentation>
+					<xs:documentation>The compartment number</xs:documentation>
 				</xs:annotation>
 			</xs:attribute>
 		</xs:complexType>
+		<xs:unique name="comp_request_type_unique">
+			<xs:annotation>
+				<xs:documentation>A type of compatible request can appear only once on each compartment type</xs:documentation>
+			</xs:annotation>
+			<xs:selector xpath="compatible_request_type"/>
+			<xs:field xpath="."/>
+		</xs:unique>
 	</xs:element>
 	<xs:element name="demand">
 		<xs:annotation>
@@ -410,6 +417,9 @@
 								</xs:annotation>
 								<xs:complexType>
 									<xs:sequence>
+										<xs:annotation>
+											<xs:documentation>Vehicle characteristics</xs:documentation>
+										</xs:annotation>
 										<xs:choice>
 											<xs:annotation>
 												<xs:documentation>Defines the departure node(s) of vehicles of the type</xs:documentation>
@@ -484,21 +494,37 @@
 										</xs:sequence>
 										<xs:element name="resource" minOccurs="0" maxOccurs="unbounded">
 											<xs:annotation>
-												<xs:documentation>Defines the resources available to the vehicle (e.g. a tool). Set the value of this element as the amount of available resource</xs:documentation>
+												<xs:documentation>Defines the resources available to the vehicle (e.g. a tool).</xs:documentation>
 											</xs:annotation>
-											<xs:complexType>
-												<xs:simpleContent>
-													<xs:extension base="xs:double">
-														<xs:attribute name="id" type="xs:int" use="required">
-															<xs:annotation>
-																<xs:documentation>The type of resource. Values for this attribute must correspond to existing resources</xs:documentation>
-															</xs:annotation>
-														</xs:attribute>
-													</xs:extension>
-												</xs:simpleContent>
+											<xs:complexType mixed="false">
+												<xs:sequence>
+													<xs:annotation>
+														<xs:documentation>Amount</xs:documentation>
+													</xs:annotation>
+													<xs:element name="start" type="positive_double" minOccurs="0">
+														<xs:annotation>
+															<xs:documentation>At the beninng of the planning horizon (e.g., when the route departs from the depot)</xs:documentation>
+														</xs:annotation>
+													</xs:element>
+													<xs:element name="end" type="positive_double" minOccurs="0">
+														<xs:annotation>
+															<xs:documentation>At the end of the planning horizon (e.g., the vehicle must end its route with X units of the resource)</xs:documentation>
+														</xs:annotation>
+													</xs:element>
+													<xs:element name="max" type="positive_double">
+														<xs:annotation>
+															<xs:documentation>Maximum amounth of resource that the vehicle can carry</xs:documentation>
+														</xs:annotation>
+													</xs:element>
+												</xs:sequence>
+												<xs:attribute name="id" type="xs:int" use="required">
+													<xs:annotation>
+														<xs:documentation>The type of resource. Values for this attribute must correspond to existing resources</xs:documentation>
+													</xs:annotation>
+												</xs:attribute>
 											</xs:complexType>
 										</xs:element>
-										<xs:element name="trailers" minOccurs="0" maxOccurs="unbounded">
+										<xs:element name="trailer" minOccurs="0" maxOccurs="unbounded">
 											<xs:annotation>
 												<xs:documentation>Defines the number of trilers that can be attached to the vehicle</xs:documentation>
 											</xs:annotation>
@@ -522,9 +548,37 @@
 										</xs:annotation>
 									</xs:attribute>
 								</xs:complexType>
-								<xs:unique name="trailer_type">
-									<xs:selector xpath="trailers"/>
+								<xs:unique name="compartment_numbe_unique_vehicle">
+									<xs:selector xpath="compartment"/>
+									<xs:field xpath="@number"/>
+								</xs:unique>
+								<xs:unique name="resource_unique_fleet">
+									<xs:annotation>
+										<xs:documentation>A resource can appear only once on each vehicle profile</xs:documentation>
+									</xs:annotation>
+									<xs:selector xpath="resource"/>
+									<xs:field xpath="@id"/>
+								</xs:unique>
+								<xs:unique name="trailer_type_unique">
+									<xs:annotation>
+										<xs:documentation>A type of trailer can appear only once on each vehicle profile</xs:documentation>
+									</xs:annotation>
+									<xs:selector xpath="trailer"/>
 									<xs:field xpath="@type"/>
+								</xs:unique>
+								<xs:unique name="departure_node_unique">
+									<xs:annotation>
+										<xs:documentation>A departurel can appear only once on each vehicle profile</xs:documentation>
+									</xs:annotation>
+									<xs:selector xpath="departure_node"/>
+									<xs:field xpath="."/>
+								</xs:unique>
+								<xs:unique name="arrival_node_unique">
+									<xs:annotation>
+										<xs:documentation>An arrival node can appear only once on each vehicle profile</xs:documentation>
+									</xs:annotation>
+									<xs:selector xpath="arrival_node"/>
+									<xs:field xpath="."/>
 								</xs:unique>
 							</xs:element>
 							<xs:element name="trailer_profile" minOccurs="0" maxOccurs="unbounded">
@@ -570,6 +624,10 @@
 										</xs:annotation>
 									</xs:attribute>
 								</xs:complexType>
+								<xs:unique name="compartment_type_unique_trailer">
+									<xs:selector xpath="compartment"/>
+									<xs:field xpath="@number"/>
+								</xs:unique>
 							</xs:element>
 						</xs:sequence>
 					</xs:complexType>
@@ -586,6 +644,21 @@
 								</xs:annotation>
 								<xs:complexType>
 									<xs:sequence>
+										<xs:element name="release" type="xs:double" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Release date of the request (e.g. dynamic VRPs)</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="priority" type="positive_double" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>The weight of the request. Use this element to model priorities between requests.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="prize" type="xs:double" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Prize collected for servicing the request (e.g. prize-collecting TSP)</xs:documentation>
+											</xs:annotation>
+										</xs:element>
 										<xs:element ref="tw" minOccurs="0" maxOccurs="unbounded">
 											<xs:annotation>
 												<xs:documentation>Model request time windows (e.g., VRPTW)</xs:documentation>
@@ -611,16 +684,6 @@
 												</xs:annotation>
 											</xs:element>
 										</xs:choice>
-										<xs:element name="prize" type="xs:double" minOccurs="0">
-											<xs:annotation>
-												<xs:documentation>Prize collected for servicing the request (e.g. prize-collecting TSP)</xs:documentation>
-											</xs:annotation>
-										</xs:element>
-										<xs:element name="release" type="xs:double" minOccurs="0">
-											<xs:annotation>
-												<xs:documentation>Release date of the request (e.g. dynamic VRPs)</xs:documentation>
-											</xs:annotation>
-										</xs:element>
 										<xs:choice minOccurs="0">
 											<xs:annotation>
 												<xs:documentation>Service time</xs:documentation>
@@ -641,6 +704,7 @@
 												</xs:annotation>
 											</xs:element>
 										</xs:choice>
+										<xs:element ref="dimensions" minOccurs="0"/>
 										<xs:element name="predecessors" minOccurs="0">
 											<xs:annotation>
 												<xs:documentation>Set of preceeding requests. Use this element to model, for instnace, pick-ups preceding deliveries in PDPs</xs:documentation>
@@ -696,7 +760,7 @@
 											<xs:documentation>The unique identifier of the request</xs:documentation>
 										</xs:annotation>
 									</xs:attribute>
-									<xs:attribute name="type" type="xs:integer">
+									<xs:attribute name="type" type="xs:positiveInteger">
 										<xs:annotation>
 											<xs:documentation>The type of request. Use this attribute to model requests of different nature. For instnace, set type=0 for pick-ups and type=1 for deliveries in PDPs</xs:documentation>
 										</xs:annotation>
@@ -712,6 +776,61 @@
 										</xs:annotation>
 									</xs:attribute>
 								</xs:complexType>
+								<xs:unique name="skill_unique">
+									<xs:selector xpath="skill"/>
+									<xs:field xpath="."/>
+								</xs:unique>
+								<xs:unique name="succ_request_unique">
+									<xs:selector xpath="successors/request"/>
+									<xs:field xpath="."/>
+								</xs:unique>
+								<xs:unique name="pred_request_unique">
+									<xs:selector xpath="predecessors/request"/>
+									<xs:field xpath="."/>
+								</xs:unique>
+								<xs:unique name="resource_unique">
+									<xs:selector xpath="resource"/>
+									<xs:field xpath="@id"/>
+								</xs:unique>
+							</xs:element>
+							<xs:element name="request_incompatibility" minOccurs="0" maxOccurs="unbounded">
+								<xs:annotation>
+									<xs:documentation>This element models incompatibilities between requests</xs:documentation>
+								</xs:annotation>
+								<xs:complexType>
+									<xs:choice>
+										<xs:sequence>
+											<xs:annotation>
+												<xs:documentation>Incompatibility between two types of requests (e.g., product 1 and product 2)</xs:documentation>
+											</xs:annotation>
+											<xs:element name="type" type="xs:positiveInteger">
+												<xs:annotation>
+													<xs:documentation>The first incompatible type of request</xs:documentation>
+												</xs:annotation>
+											</xs:element>
+											<xs:element name="type" type="xs:positiveInteger">
+												<xs:annotation>
+													<xs:documentation>The second incompatible type of request</xs:documentation>
+												</xs:annotation>
+											</xs:element>
+										</xs:sequence>
+										<xs:sequence>
+											<xs:annotation>
+												<xs:documentation>Incompatibility between two specific requests (e.g., request number 1 and request number 10)</xs:documentation>
+											</xs:annotation>
+											<xs:element name="id" type="xs:positiveInteger">
+												<xs:annotation>
+													<xs:documentation>ID of the first incompatible request</xs:documentation>
+												</xs:annotation>
+											</xs:element>
+											<xs:element name="id" type="xs:positiveInteger">
+												<xs:annotation>
+													<xs:documentation>ID of the second incompatible request</xs:documentation>
+												</xs:annotation>
+											</xs:element>
+										</xs:sequence>
+									</xs:choice>
+								</xs:complexType>
 							</xs:element>
 						</xs:sequence>
 					</xs:complexType>
@@ -724,24 +843,28 @@
 						<xs:sequence>
 							<xs:element name="resource" maxOccurs="unbounded">
 								<xs:annotation>
-									<xs:documentation>Models a resource (e.g., a tool, a spare part, a skill)</xs:documentation>
+									<xs:documentation>Models a resource (e.g., a tool or a spare partl)</xs:documentation>
 								</xs:annotation>
-								<xs:complexType mixed="true">
-									<xs:attribute name="id" type="xs:integer" use="required">
-										<xs:annotation>
-											<xs:documentation>Defines the unique identifier of the resource</xs:documentation>
-										</xs:annotation>
-									</xs:attribute>
-									<xs:attribute name="renewable" type="xs:boolean" use="required">
-										<xs:annotation>
-											<xs:documentation>True if the resource is renewable (e.g., a tool) and false otherwise (e.g., a spare part)</xs:documentation>
-										</xs:annotation>
-									</xs:attribute>
-									<xs:attribute name="name" type="xs:string" use="required">
-										<xs:annotation>
-											<xs:documentation>Name of the resource</xs:documentation>
-										</xs:annotation>
-									</xs:attribute>
+								<xs:complexType mixed="false">
+									<xs:simpleContent>
+										<xs:extension base="positive_double">
+											<xs:attribute name="id" type="xs:integer" use="required">
+												<xs:annotation>
+													<xs:documentation>Defines the unique identifier of the resource</xs:documentation>
+												</xs:annotation>
+											</xs:attribute>
+											<xs:attribute name="renewable" type="xs:boolean" use="required">
+												<xs:annotation>
+													<xs:documentation>True if the resource is renewable (e.g., a tool) and false otherwise (e.g., a spare part)</xs:documentation>
+												</xs:annotation>
+											</xs:attribute>
+											<xs:attribute name="name" type="xs:string" use="required">
+												<xs:annotation>
+													<xs:documentation>Name of the resource</xs:documentation>
+												</xs:annotation>
+											</xs:attribute>
+										</xs:extension>
+									</xs:simpleContent>
 								</xs:complexType>
 							</xs:element>
 						</xs:sequence>
@@ -773,7 +896,7 @@
 											<xs:annotation>
 												<xs:documentation>The list of skills of the driver</xs:documentation>
 											</xs:annotation>
-											<xs:complexType mixed="true">
+											<xs:complexType mixed="false">
 												<xs:attribute name="id" type="xs:integer" use="required">
 													<xs:annotation>
 														<xs:documentation>Unique identifier of the skill</xs:documentation>
@@ -812,14 +935,32 @@
 										</xs:annotation>
 									</xs:attribute>
 								</xs:complexType>
+								<xs:unique name="skill_id_unique">
+									<xs:annotation>
+										<xs:documentation>A skill can appear only once on each profile</xs:documentation>
+									</xs:annotation>
+									<xs:selector xpath="skill"/>
+									<xs:field xpath="@id"/>
+								</xs:unique>
+								<xs:unique name="comp_vehicle_unique">
+									<xs:annotation>
+										<xs:documentation>A compatible vehicle can appear only once on each profile</xs:documentation>
+									</xs:annotation>
+									<xs:selector xpath="compatible_vehicle_type"/>
+									<xs:field xpath="."/>
+								</xs:unique>
 							</xs:element>
 						</xs:sequence>
 					</xs:complexType>
 				</xs:element>
 			</xs:all>
 		</xs:complexType>
+		<xs:keyref name="incompatible_request_id_exist" refer="request_id">
+			<xs:selector xpath="requests/request_incompatibility/type"/>
+			<xs:field xpath="."/>
+		</xs:keyref>
 		<xs:keyref name="trailer_profile_exists" refer="trailer_type_key">
-			<xs:selector xpath="fleet/vehicle_profile/trailers"/>
+			<xs:selector xpath="fleet/vehicle_profile/trailer"/>
 			<xs:field xpath="@type"/>
 		</xs:keyref>
 		<xs:key name="trailer_type_key">
@@ -1048,12 +1189,12 @@
 			<xs:extension base="xs:double">
 				<xs:attribute name="start" type="xs:int" use="required">
 					<xs:annotation>
-						<xs:documentation>Start point (in time) of the period (e.g., rush-hour or off-peak hours)</xs:documentation>
+						<xs:documentation>Start point (in time) of the time interval (e.g., rush-hour or off-peak hours)</xs:documentation>
 					</xs:annotation>
 				</xs:attribute>
 				<xs:attribute name="end" type="xs:int" use="required">
 					<xs:annotation>
-						<xs:documentation>Start point (in time) of the period (e.g., rush-hour or off-peak hours)</xs:documentation>
+						<xs:documentation>End point (in time) of the time interval (e.g., rush-hour or off-peak hours)</xs:documentation>
 					</xs:annotation>
 				</xs:attribute>
 			</xs:extension>
