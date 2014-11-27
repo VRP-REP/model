@@ -843,7 +843,7 @@
 						<xs:sequence>
 							<xs:element name="resource" maxOccurs="unbounded">
 								<xs:annotation>
-									<xs:documentation>Models a resource (e.g., a tool or a spare partl)</xs:documentation>
+									<xs:documentation>Models a resource (e.g., a tool or a spare partl). The value of this element represents the "amount" of avaliable resources of the type.</xs:documentation>
 								</xs:annotation>
 								<xs:complexType mixed="false">
 									<xs:simpleContent>
@@ -987,10 +987,6 @@
 			<xs:selector xpath="fleet/vehicle_profile"/>
 			<xs:field xpath="@type"/>
 		</xs:key>
-		<xs:key name="skill_id">
-			<xs:selector xpath="drivers/driver_profile/skill"/>
-			<xs:field xpath="@id"/>
-		</xs:key>
 		<xs:key name="resource_id">
 			<xs:selector xpath="resources/resource"/>
 			<xs:field xpath="@id"/>
@@ -1003,10 +999,6 @@
 			<xs:selector xpath="network/nodes/node"/>
 			<xs:field xpath="@id"/>
 		</xs:key>
-		<xs:keyref name="skill_exists_request" refer="skill_id">
-			<xs:selector xpath="requests/request"/>
-			<xs:field xpath="skill"/>
-		</xs:keyref>
 		<xs:keyref name="resource_exists_request" refer="resource_id">
 			<xs:selector xpath="requests/request/resource"/>
 			<xs:field xpath="@id"/>
