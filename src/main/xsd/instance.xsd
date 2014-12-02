@@ -2,35 +2,6 @@
 <!-- edited with XMLSpy v2011 rel. 3 sp1 (http://www.altova.com) by IMA (Université Catholique de l'Ouest) -->
 <!-- Date: 2012/06/21 -->
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
-	<xs:element name="action">
-		<xs:annotation>
-			<xs:documentation>Deifnes an action</xs:documentation>
-		</xs:annotation>
-		<xs:complexType>
-			<xs:sequence>
-				<xs:element name="duration" type="positive_double">
-					<xs:annotation>
-						<xs:documentation>Time needed to complete the action</xs:documentation>
-					</xs:annotation>
-				</xs:element>
-				<xs:element name="cost" type="positive_double">
-					<xs:annotation>
-						<xs:documentation>cost of the action</xs:documentation>
-					</xs:annotation>
-				</xs:element>
-			</xs:sequence>
-			<xs:attribute name="type" type="xs:positiveInteger" use="required">
-				<xs:annotation>
-					<xs:documentation>Action type</xs:documentation>
-				</xs:annotation>
-			</xs:attribute>
-			<xs:attribute name="name" type="xs:string" use="required">
-				<xs:annotation>
-					<xs:documentation>Name of the action</xs:documentation>
-				</xs:annotation>
-			</xs:attribute>
-		</xs:complexType>
-	</xs:element>
 	<xs:element name="compartment">
 		<xs:annotation>
 			<xs:documentation>Defines a vehicle compartment</xs:documentation>
@@ -65,7 +36,7 @@
 						</xs:annotation>
 					</xs:element>
 				</xs:choice>
-				<xs:element name="compatible_request_type" type="xs:int" minOccurs="0" maxOccurs="unbounded">
+				<xs:element name="compatible_request_type" type="xs:integer" minOccurs="0" maxOccurs="unbounded">
 					<xs:annotation>
 						<xs:documentation>Defines the types of requests that are compatible with this compartment</xs:documentation>
 					</xs:annotation>
@@ -96,7 +67,7 @@
 					</xs:element>
 				</xs:choice>
 			</xs:sequence>
-			<xs:attribute name="number" type="xs:integer" use="required">
+			<xs:attribute name="number" type="xs:positiveInteger" use="required">
 				<xs:annotation>
 					<xs:documentation>The compartment number</xs:documentation>
 				</xs:annotation>
@@ -109,30 +80,6 @@
 			<xs:selector xpath="compatible_request_type"/>
 			<xs:field xpath="."/>
 		</xs:unique>
-	</xs:element>
-	<xs:element name="demand">
-		<xs:annotation>
-			<xs:documentation>Defines a demand</xs:documentation>
-		</xs:annotation>
-		<xs:complexType mixed="true">
-			<xs:choice minOccurs="0">
-				<xs:element ref="random_variable">
-					<xs:annotation>
-						<xs:documentation>Models a probability distribution</xs:documentation>
-					</xs:annotation>
-				</xs:element>
-			</xs:choice>
-			<xs:attribute name="splitable" type="xs:boolean" default="false">
-				<xs:annotation>
-					<xs:documentation>Is the demand splitable? set is_splitable=true if that is the case (e.g., VRP with split delivery)</xs:documentation>
-				</xs:annotation>
-			</xs:attribute>
-			<xs:attribute name="type" type="xs:int">
-				<xs:annotation>
-					<xs:documentation>The demand's type. Use this attribute to model, for instance, different demands in multicompartment VRPs</xs:documentation>
-				</xs:annotation>
-			</xs:attribute>
-		</xs:complexType>
 	</xs:element>
 	<xs:element name="dimensions" type="dimensions_type">
 		<xs:annotation>
@@ -225,7 +172,7 @@
 															</xs:element>
 														</xs:sequence>
 													</xs:choice>
-													<xs:element name="compatible_vehicle" type="xs:int" minOccurs="0" maxOccurs="unbounded">
+													<xs:element name="compatible_vehicle" type="xs:integer" minOccurs="0" maxOccurs="unbounded">
 														<xs:annotation>
 															<xs:documentation>List the vehicle profiles that are compatible with this node. Use this element to model site-dependent VRPs</xs:documentation>
 														</xs:annotation>
@@ -394,7 +341,7 @@
 											</xs:annotation>
 											<xs:complexType/>
 										</xs:element>
-										<xs:element name="decimals" type="xs:int">
+										<xs:element name="decimals" type="xs:integer">
 											<xs:annotation>
 												<xs:documentation>Specify the number of decimals</xs:documentation>
 											</xs:annotation>
@@ -517,7 +464,7 @@
 														</xs:annotation>
 													</xs:element>
 												</xs:sequence>
-												<xs:attribute name="id" type="xs:int" use="required">
+												<xs:attribute name="id" type="xs:integer" use="required">
 													<xs:annotation>
 														<xs:documentation>The type of resource. Values for this attribute must correspond to existing resources</xs:documentation>
 													</xs:annotation>
@@ -530,8 +477,8 @@
 											</xs:annotation>
 											<xs:complexType>
 												<xs:simpleContent>
-													<xs:extension base="xs:positiveInteger">
-														<xs:attribute name="type" type="xs:positiveInteger" use="required"/>
+													<xs:extension base="xs:integer">
+														<xs:attribute name="type" type="xs:integer" use="required"/>
 													</xs:extension>
 												</xs:simpleContent>
 											</xs:complexType>
@@ -542,7 +489,7 @@
 											<xs:documentation>Type of vehicle profile. Use this attribute to model VRPs with heterogeneous fleet</xs:documentation>
 										</xs:annotation>
 									</xs:attribute>
-									<xs:attribute name="number" type="xs:int">
+									<xs:attribute name="number" type="xs:positiveInteger">
 										<xs:annotation>
 											<xs:documentation>Defines the number of vehicles sharing this profile. Use this attribute to model fix-fleet VRPs</xs:documentation>
 										</xs:annotation>
@@ -613,12 +560,12 @@
 											</xs:element>
 										</xs:sequence>
 									</xs:sequence>
-									<xs:attribute name="type" type="xs:int" use="required">
+									<xs:attribute name="type" type="xs:integer" use="required">
 										<xs:annotation>
 											<xs:documentation>Type of trailer</xs:documentation>
 										</xs:annotation>
 									</xs:attribute>
-									<xs:attribute name="number" type="xs:int">
+									<xs:attribute name="number" type="xs:positiveInteger">
 										<xs:annotation>
 											<xs:documentation>Number of available containers of the type</xs:documentation>
 										</xs:annotation>
@@ -733,7 +680,7 @@
 												</xs:sequence>
 											</xs:complexType>
 										</xs:element>
-										<xs:element name="skill" type="xs:int" minOccurs="0" maxOccurs="unbounded">
+										<xs:element name="skill" type="xs:integer" minOccurs="0" maxOccurs="unbounded">
 											<xs:annotation>
 												<xs:documentation>The set of skills needed to complete the request (e.g., a skill on the technician routing problem). The value for this element must correspont to the identifier of one of the skills defined in the "skills" section</xs:documentation>
 											</xs:annotation>
@@ -745,7 +692,7 @@
 											<xs:complexType>
 												<xs:simpleContent>
 													<xs:extension base="xs:double">
-														<xs:attribute name="id" type="xs:int" use="required">
+														<xs:attribute name="id" type="xs:integer" use="required">
 															<xs:annotation>
 																<xs:documentation>The resource's identifier. The value for this attribute must correspond to the id of one of the existing resouces</xs:documentation>
 															</xs:annotation>
@@ -760,7 +707,7 @@
 											<xs:documentation>The unique identifier of the request</xs:documentation>
 										</xs:annotation>
 									</xs:attribute>
-									<xs:attribute name="type" type="xs:positiveInteger">
+									<xs:attribute name="type" type="xs:integer">
 										<xs:annotation>
 											<xs:documentation>The type of request. Use this attribute to model requests of different nature. For instnace, set type=0 for pick-ups and type=1 for deliveries in PDPs</xs:documentation>
 										</xs:annotation>
@@ -803,12 +750,12 @@
 											<xs:annotation>
 												<xs:documentation>Incompatibility between two types of requests (e.g., product 1 and product 2)</xs:documentation>
 											</xs:annotation>
-											<xs:element name="type" type="xs:positiveInteger">
+											<xs:element name="type" type="xs:integer">
 												<xs:annotation>
 													<xs:documentation>The first incompatible type of request</xs:documentation>
 												</xs:annotation>
 											</xs:element>
-											<xs:element name="type" type="xs:positiveInteger">
+											<xs:element name="type" type="xs:integer">
 												<xs:annotation>
 													<xs:documentation>The second incompatible type of request</xs:documentation>
 												</xs:annotation>
@@ -818,12 +765,12 @@
 											<xs:annotation>
 												<xs:documentation>Incompatibility between two specific requests (e.g., request number 1 and request number 10)</xs:documentation>
 											</xs:annotation>
-											<xs:element name="id" type="xs:positiveInteger">
+											<xs:element name="id" type="xs:integer">
 												<xs:annotation>
 													<xs:documentation>ID of the first incompatible request</xs:documentation>
 												</xs:annotation>
 											</xs:element>
-											<xs:element name="id" type="xs:positiveInteger">
+											<xs:element name="id" type="xs:integer">
 												<xs:annotation>
 													<xs:documentation>ID of the second incompatible request</xs:documentation>
 												</xs:annotation>
@@ -886,7 +833,7 @@
 												</xs:annotation>
 												<xs:complexType/>
 											</xs:element>
-											<xs:element name="compatible_vehicle_type" type="xs:int" maxOccurs="unbounded">
+											<xs:element name="compatible_vehicle_type" type="xs:integer" maxOccurs="unbounded">
 												<xs:annotation>
 													<xs:documentation>Add one of these elements for each compatible vehicle type</xs:documentation>
 												</xs:annotation>
@@ -910,12 +857,12 @@
 											</xs:annotation>
 											<xs:complexType>
 												<xs:sequence>
-													<xs:element name="max_work_time" type="xs:double" minOccurs="0">
+													<xs:element name="max_work_time" type="positive_double" minOccurs="0">
 														<xs:annotation>
 															<xs:documentation>Maximum working time of the driver</xs:documentation>
 														</xs:annotation>
 													</xs:element>
-													<xs:element name="max_driving_time" type="xs:double" minOccurs="0">
+													<xs:element name="max_driving_time" type="positive_double" minOccurs="0">
 														<xs:annotation>
 															<xs:documentation>Maximum driving time</xs:documentation>
 														</xs:annotation>
@@ -929,7 +876,7 @@
 											</xs:complexType>
 										</xs:element>
 									</xs:sequence>
-									<xs:attribute name="type" type="xs:int" use="required">
+									<xs:attribute name="type" type="xs:integer" use="required">
 										<xs:annotation>
 											<xs:documentation>Unique identifier of the driver profile</xs:documentation>
 										</xs:annotation>
@@ -1141,7 +1088,7 @@
 									<xs:documentation>Name of the moment (e.g., mean, variance)</xs:documentation>
 								</xs:annotation>
 							</xs:attribute>
-							<xs:attribute name="number" type="xs:integer" use="required">
+							<xs:attribute name="number" type="xs:positiveInteger" use="required">
 								<xs:annotation>
 									<xs:documentation>Moment number. For instance set moment_number=1 to define the mean, moment_number=2 to define the variance, moment_number=3 to define the skewness, etc.</xs:documentation>
 								</xs:annotation>
@@ -1179,12 +1126,12 @@
 		</xs:annotation>
 		<xs:simpleContent>
 			<xs:extension base="xs:double">
-				<xs:attribute name="start" type="xs:int" use="required">
+				<xs:attribute name="start" type="xs:integer" use="required">
 					<xs:annotation>
 						<xs:documentation>Start point (in time) of the time interval (e.g., rush-hour or off-peak hours)</xs:documentation>
 					</xs:annotation>
 				</xs:attribute>
-				<xs:attribute name="end" type="xs:int" use="required">
+				<xs:attribute name="end" type="xs:integer" use="required">
 					<xs:annotation>
 						<xs:documentation>End point (in time) of the time interval (e.g., rush-hour or off-peak hours)</xs:documentation>
 					</xs:annotation>
@@ -1205,7 +1152,7 @@
 				<xs:complexType>
 					<xs:simpleContent>
 						<xs:extension base="xs:double">
-							<xs:attribute name="id" use="required">
+							<xs:attribute name="id" type="xs:integer" use="required">
 								<xs:annotation>
 									<xs:documentation>Scenario id</xs:documentation>
 								</xs:annotation>
@@ -1236,7 +1183,7 @@
 					</xs:annotation>
 					<xs:complexType mixed="true">
 						<xs:simpleContent>
-							<xs:extension base="xs:int">
+							<xs:extension base="xs:integer">
 								<xs:attribute name="soft" type="xs:boolean" default="true">
 									<xs:annotation>
 										<xs:documentation>Use this attribute to model the flexibility of the start of the time window (set it to true if the start of the window is a hard constraint, false otherwise)</xs:documentation>
@@ -1252,7 +1199,7 @@
 					</xs:annotation>
 					<xs:complexType mixed="true">
 						<xs:simpleContent>
-							<xs:extension base="xs:int">
+							<xs:extension base="xs:integer">
 								<xs:attribute name="soft" type="xs:boolean" default="true">
 									<xs:annotation>
 										<xs:documentation>Use this attribute to model the flexibility of the end of the time window (set it to true if the start of the window is a hard constraint, false otherwise)</xs:documentation>
@@ -1269,31 +1216,14 @@
 				</xs:annotation>
 				<xs:complexType>
 					<xs:simpleContent>
-						<xs:extension base="xs:int">
-							<xs:attribute name="soft" type="xs:boolean"/>
+						<xs:extension base="xs:integer">
+							<xs:attribute name="soft" type="xs:boolean" default="true"/>
 						</xs:extension>
 					</xs:simpleContent>
 				</xs:complexType>
 			</xs:element>
 		</xs:choice>
 	</xs:complexType>
-	<xs:simpleType name="positive_double">
-		<xs:annotation>
-			<xs:documentation>Double restricted to be greater than or equal to 0</xs:documentation>
-		</xs:annotation>
-		<xs:restriction base="xs:double">
-			<xs:minInclusive value="0.00"/>
-		</xs:restriction>
-	</xs:simpleType>
-	<xs:simpleType name="probability">
-		<xs:annotation>
-			<xs:documentation>Double restricted to be greater than or equal to 0 and lower than or equal to 1</xs:documentation>
-		</xs:annotation>
-		<xs:restriction base="xs:double">
-			<xs:minInclusive value="0.00"/>
-			<xs:maxInclusive value="1"/>
-		</xs:restriction>
-	</xs:simpleType>
 	<xs:group name="storage">
 		<xs:sequence>
 			<xs:annotation>
@@ -1338,4 +1268,21 @@
 			</xs:sequence>
 		</xs:sequence>
 	</xs:group>
+	<xs:simpleType name="positive_double">
+		<xs:annotation>
+			<xs:documentation>Double restricted to be greater than or equal to 0</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:double">
+			<xs:minInclusive value="0.00"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="probability">
+		<xs:annotation>
+			<xs:documentation>Double restricted to be greater than or equal to 0 and lower than or equal to 1</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:double">
+			<xs:minInclusive value="0.00"/>
+			<xs:maxInclusive value="1"/>
+		</xs:restriction>
+	</xs:simpleType>
 </xs:schema>
