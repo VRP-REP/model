@@ -805,14 +805,9 @@
 											<xs:annotation>
 												<xs:documentation>Incompatibility between two types of requests (e.g., product 1 and product 2)</xs:documentation>
 											</xs:annotation>
-											<xs:element name="type" type="xs:integer">
+											<xs:element name="type" type="xs:integer" minOccurs="2" maxOccurs="2">
 												<xs:annotation>
 													<xs:documentation>The first incompatible type of request</xs:documentation>
-												</xs:annotation>
-											</xs:element>
-											<xs:element name="type" type="xs:integer">
-												<xs:annotation>
-													<xs:documentation>The second incompatible type of request</xs:documentation>
 												</xs:annotation>
 											</xs:element>
 										</xs:sequence>
@@ -820,14 +815,9 @@
 											<xs:annotation>
 												<xs:documentation>Incompatibility between two specific requests (e.g., request number 1 and request number 10)</xs:documentation>
 											</xs:annotation>
-											<xs:element name="id" type="xs:integer">
+											<xs:element name="id" type="xs:integer" minOccurs="2" maxOccurs="2">
 												<xs:annotation>
 													<xs:documentation>ID of the first incompatible request</xs:documentation>
-												</xs:annotation>
-											</xs:element>
-											<xs:element name="id" type="xs:integer">
-												<xs:annotation>
-													<xs:documentation>ID of the second incompatible request</xs:documentation>
 												</xs:annotation>
 											</xs:element>
 										</xs:sequence>
